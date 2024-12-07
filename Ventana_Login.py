@@ -19,7 +19,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label_2 = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(70, 190, 35, 10))
+        self.label_2.setGeometry(QtCore.QRect(70, 190, 151, 16))
         self.label_2.setStyleSheet("background-color: rgba(0, 0, 0, 0%);\n"
 "border:None;")
         self.label_2.setObjectName("label_2")
@@ -30,7 +30,7 @@ class Ui_MainWindow(object):
         self.lineEdit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.lineEdit.setObjectName("lineEdit")
         self.label_3 = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(70, 240, 35, 10))
+        self.label_3.setGeometry(QtCore.QRect(70, 240, 151, 16))
         self.label_3.setStyleSheet("background-color: rgba(0, 0, 0, 0%);\n"
 "border:None;")
         self.label_3.setObjectName("label_3")

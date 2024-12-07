@@ -34,8 +34,8 @@
      <rect>
       <x>70</x>
       <y>190</y>
-      <width>35</width>
-      <height>10</height>
+      <width>151</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -71,8 +71,8 @@ border:None;</string>
      <rect>
       <x>70</x>
       <y>240</y>
-      <width>35</width>
-      <height>10</height>
+      <width>151</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="styleSheet">
