@@ -4,6 +4,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from Ventana_Login import Ui_MainWindow as Ui_login
 from main import Ventana
 
+#Funcion externa para leer archivo de usuarios
 def leer_usuarios():
     usuarios = []
     try:
