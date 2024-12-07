@@ -45,20 +45,6 @@ class LoginWindow(QMainWindow, Ui_login):
                 self.Enviar.show()
         else:
             print("Usuario no valido")
-        
-        #=> Habilitar/Deshabilitar tabs para tipo de Usuario
-        def Configurar_rol(self, rol):
-            self.rol == "Lector"
-            self.tab_histor.setEnabled(False)
-            self.tab_libros.setEnabled(False)
-            self.tab_user.setEnabled(False)
-        if self.rol == "Bibliotecario":
-            self.tab_histor.setEnabled(True)
-            self.tab_libros.setEnabled(True)
-            self.tab_user.setEnabled(True)
-            self.tab_prest.setEnabled(True)
-        else:
-            pass
 
     def salir(self):
         sys.exit() 
