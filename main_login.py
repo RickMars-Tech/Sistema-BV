@@ -11,13 +11,17 @@ class LoginWindow(QMainWindow, Ui_login):
         self.pushButton.clicked.connect(self.LOGIN)
         self.pushButton_Salir.clicked.connect(self.salir)
         
-        self.Historial_mostrar = None
+        self.Enviar = None
 
     def LOGIN(self):
         username = self.user_edit.text()  
         password = self.paswr_edit.text()  
         
         if username == "admin" and password == "123456":
+            if self.Enviar is None: #Aun no funciona por los usuarios
+                self.Enviar = Ventana
+            self.Enviar.show()
+            self.close()
             self.close()  
 
     def salir(self):
