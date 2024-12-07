@@ -1,12 +1,26 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6 import QtCore, QtGui, QtWidgets
 from Ventana_Login import Ui_MainWindow as Ui_login
+from main import Ventana
+
+def leer_usuarios():
+    usuarios = []
+    try:
+        with open('usuarios.txt', 'r') as archivo:
+            for linea in archivo:
+                user_id, nombre, rol = linea.strip().split(',')
+                usuario = usuario(user_id, nombre, rol)
+                usuarios.append(usuario)
+    except FileNotFoundError:
+        print("Error: El archivo de usuarios no existe.")
+    return usuarios
+
 
 class LoginWindow(QMainWindow, Ui_login):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        
         
         self.pushButton.clicked.connect(self.LOGIN)
         self.pushButton_Salir.clicked.connect(self.salir)
@@ -14,15 +28,36 @@ class LoginWindow(QMainWindow, Ui_login):
         self.Enviar = None
 
     def LOGIN(self):
-        username = self.user_edit.text()  
-        password = self.paswr_edit.text()  
+        user_id = self.lineEdit_2.text()
+        usuarios = leer_usuarios()
         
-        if username == "admin" and password == "123456":
-            if self.Enviar is None: #Aun no funciona por los usuarios
-                self.Enviar = Ventana
-            self.Enviar.show()
-            self.close()
-            self.close()  
+        usuario_valido = None
+        for usuario in usuarios:
+            if usuario.user_id == user_id:
+                usuario_valido = usuario
+                break
+            
+        if usuario_valido:
+            self.Configurar_rol(usuario_valido.rol)
+            if self.Enviar is None:
+                self.Enviar = Ventana()
+                self.Enviar.show()
+        else:
+            print("Usuario no valido")
+        
+        #=> Habilitar/Deshabilitar tabs para tipo de Usuario
+        def Configurar_rol(self, rol):
+            self.rol == "Lector"
+            self.tab_histor.setEnabled(False)
+            self.tab_libros.setEnabled(False)
+            self.tab_user.setEnabled(False)
+        if self.rol == "Bibliotecario":
+            self.tab_histor.setEnabled(True)
+            self.tab_libros.setEnabled(True)
+            self.tab_user.setEnabled(True)
+            self.tab_prest.setEnabled(True)
+        else:
+            pass
 
     def salir(self):
         sys.exit() 
