@@ -18,18 +18,6 @@ class Ventana(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        #=> Habilitar/Deshabilitar tabs para tipo de Usuario
-        if self.rol == Lector:
-            self.tab_histor.setEnabled(False)
-            self.tab_libros.setEnabled(False)
-            self.tab_user.setEnabled(False)
-        if self.rol == Bibliotecario:
-            self.tab_histor.setEnabled(True)
-            self.tab_libros.setEnabled(True)
-            self.tab_user.setEnabled(True)
-            self.tab_prest.setEnabled(True)
-        else:
-            pass
 
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
         # Acciones de Botones en Tab de Libros
