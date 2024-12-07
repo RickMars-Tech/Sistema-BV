@@ -8,6 +8,7 @@ def guardar_en_archivo(nombre_archivo, datos):
     with open(nombre_archivo, 'a') as archivo:
         archivo.write(datos + '\n')
 
+
 def leer_archivo(nombre_archivo):
     if os.path.exists(nombre_archivo):
         with open(nombre_archivo, 'r') as archivo:
@@ -18,7 +19,7 @@ class Ventana(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
+    
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
         # Acciones de Botones en Tab de Libros
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
@@ -46,6 +47,21 @@ class Ventana(QMainWindow, Ui_MainWindow):
         # Acciones de Botones en Tab de Historial
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
         self.consultar_historial_btm.clicked.connect(self.consultar_historial)
+    
+#=> Habilitar/Deshabilitar tabs para tipo de Usuario
+    def configurar_rol(self): 
+        if self.rol == "Lector": 
+            self.tabHistor.setEnabled(False) 
+            self.tabLibros.setEnabled(False) 
+            self.tabUser.setEnabled(False) 
+            self.tabPrest.setEnabled(False) 
+        elif self.rol == "Bibliotecario": 
+            self.tabHistor.setEnabled(True) 
+            self.tabLibros.setEnabled(True) 
+            self.tabUser.setEnabled(True) 
+            self.tabPrest.setEnabled(True) 
+        else: 
+            pass
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
     # Acciones de Botones en Tab de Libros
@@ -201,8 +217,11 @@ class Ventana(QMainWindow, Ui_MainWindow):
             self.listPrestamos.addItem(prestamo)  # Añadir cada préstamo a la lista
 
 
-app = QApplication(sys.argv)
-win = Ventana()
-win.show()
-app.exec()
+def main():
+    app = QApplication(sys.argv) 
+    login_window = Ventana() 
+    login_window.show() 
+    sys.exit(app.exec()) 
+if __name__ == "__main__": 
+    main()
 
