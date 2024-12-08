@@ -29,12 +29,14 @@ class LoginWindow(QMainWindow, Ui_login):
         self.Enviar = None
 
     def LOGIN(self):
+        nombre = self.lineEdit.text()
         user_id = self.lineEdit_2.text()
         usuarios = leer_usuarios()
         
         usuario_valido = None
+        #Inicio de sesion
         for usuario in usuarios:
-            if usuario.user_id == user_id:
+            if usuario.user_id == user_id and usuario.nombre == nombre:
                 usuario_valido = usuario
                 break
             
@@ -45,6 +47,21 @@ class LoginWindow(QMainWindow, Ui_login):
                 self.Enviar.show()
         else:
             print("Usuario no valido")
+        
+    #=> Habilitar/Deshabilitar tabs para tipo de Usuario
+    def configurar_rol(self): 
+        if self.rol == "Lector": 
+            self.tabHistor.setEnabled(False) 
+            self.tabLibros.setEnabled(False) 
+            self.tabUser.setEnabled(False) 
+            self.tabPrest.setEnabled(False) 
+        elif self.rol == "Bibliotecario": 
+            self.tabHistor.setEnabled(True) 
+            self.tabLibros.setEnabled(True) 
+            self.tabUser.setEnabled(True) 
+            self.tabPrest.setEnabled(True) 
+        else: 
+            pass
 
     def salir(self):
         sys.exit() 
