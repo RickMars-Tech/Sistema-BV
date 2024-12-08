@@ -73,9 +73,9 @@ class Ventana(QMainWindow, Ui_MainWindow):
         estado = "Disponible"
         datos = f"{isbn},{titulo},{autor},{estado}"
         guardar_en_archivo('libros.txt', datos)
-        self.Ag_LibTitulo_LEdit.setText()
-        self.Ag_LibAutor_LEdit.setText()
-        self.Ag_LibISBN_LEdit.setText()
+        self.Ag_LibTitulo_LEdit.setText("")
+        self.Ag_LibAutor_LEdit.setText("")
+        self.Ag_LibISBN_LEdit.setText("")
         self.consultar_libro()  # Actualizar la lista de libros
 
     def consultar_libro(self):
