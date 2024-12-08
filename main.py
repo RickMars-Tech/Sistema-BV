@@ -4,6 +4,7 @@ from PyQt6.QtCore import QDateTime
 from window_biblio import Ui_MainWindow
 from main_login import LoginWindow
 import os
+import re
 
 # Funciones auxiliares para manejo de archivos
 def guardar_en_archivo(nombre_archivo, datos):
