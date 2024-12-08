@@ -29,7 +29,7 @@
    <enum>Qt::LayoutDirection::LeftToRight</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QTabWidget" name="TabGeneral">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -60,7 +60,7 @@
      <enum>Qt::LayoutDirection::LeftToRight</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_libros">
      <attribute name="title">
@@ -89,15 +89,15 @@
        <item row="1" column="1">
         <widget class="QLineEdit" name="Ag_LibTitulo_LEdit"/>
        </item>
-       <item row="5" column="0">
-        <widget class="QPushButton" name="agr_lib_btm">
-         <property name="text">
-          <string>Agregar</string>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="1">
         <widget class="QLineEdit" name="Ag_LibISBN_LEdit"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Titulo</string>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_3">
@@ -105,9 +105,6 @@
           <string>ISBN</string>
          </property>
         </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="Ag_LibAutor_LEdit"/>
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_5">
@@ -122,27 +119,13 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Titulo</string>
-         </property>
-        </widget>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="Ag_LibAutor_LEdit"/>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_4">
+        <widget class="QPushButton" name="agr_lib_btm">
          <property name="text">
-          <string>Estado</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="Ag_LibEstado_LEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+          <string>Agregar</string>
          </property>
         </widget>
        </item>
@@ -264,7 +247,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QListView" name="list_libros"/>
+        <widget class="QListWidget" name="list_libros"/>
        </item>
        <item>
         <widget class="QPushButton" name="consultar_libro_btm">
@@ -290,6 +273,26 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>ID</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="Reg_UsrRol_LEdit"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="reg_usr_btm">
+         <property name="text">
+          <string>Registrar</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="Reg_UsrName_LEdit"/>
+       </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_14">
          <property name="maximumSize">
@@ -303,40 +306,20 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Rol</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="1">
         <widget class="QLineEdit" name="Reg_UsrID_LEdit"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="reg_usr_btm">
-         <property name="text">
-          <string>Registrar</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_16">
-         <property name="text">
-          <string>ID</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="Reg_UsrName_LEdit"/>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="Reg_UsrRol_LEdit"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_15">
          <property name="text">
           <string>Nombre</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_13">
-         <property name="text">
-          <string>Rol</string>
          </property>
         </widget>
        </item>
@@ -448,7 +431,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QListView" name="listUsuarios"/>
+        <widget class="QListWidget" name="listUsuarios"/>
        </item>
        <item>
         <widget class="QPushButton" name="consultar_usuarios_btm">
@@ -490,12 +473,6 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_6">
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="Reg_libPrestamo_LEdit"/>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="Reg_fechPrestamo_LEdit"/>
-       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_31">
          <property name="text">
@@ -503,19 +480,8 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="reg_prestamo_btm">
-         <property name="text">
-          <string>Registrar</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_32">
-         <property name="text">
-          <string>Libro</string>
-         </property>
-        </widget>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="Reg_libPrestamo_comboBox"/>
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_34">
@@ -531,14 +497,21 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_33">
+        <widget class="QPushButton" name="reg_prestamo_btm">
          <property name="text">
-          <string>Fecha de Prestamo</string>
+          <string>Registrar</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
         <widget class="QLineEdit" name="Reg_usrPrestamo_LEdit"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_32">
+         <property name="text">
+          <string>Libro</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -553,12 +526,15 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_25"/>
+        <widget class="QComboBox" name="Reg_libDevolucion_comboBox"/>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_37">
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_24"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_36">
          <property name="text">
-          <string>Libro</string>
+          <string>Usuario</string>
          </property>
         </widget>
        </item>
@@ -575,37 +551,17 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_24"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_36">
-         <property name="text">
-          <string>Usuario</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
+       <item row="3" column="0">
         <widget class="QPushButton" name="reg_devolucion_btm">
          <property name="text">
           <string>Registrar</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_40">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_37">
          <property name="text">
-          <string>Fecha de Devolucion</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="Reg_fechDevolucion_LEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+          <string>Libro</string>
          </property>
         </widget>
        </item>
@@ -621,7 +577,7 @@
        <rect>
         <x>20</x>
         <y>20</y>
-        <width>281</width>
+        <width>801</width>
         <height>521</height>
        </rect>
       </property>
@@ -634,7 +590,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QListView" name="listView_4"/>
+        <widget class="QListWidget" name="listPrestamos"/>
        </item>
        <item>
         <widget class="QPushButton" name="consultar_historial_btm">
@@ -660,11 +616,17 @@
    </property>
    <widget class="QMenu" name="menuSalir">
     <property name="title">
-     <string>Sa&amp;lir</string>
+     <string>&amp;Menu</string>
     </property>
+    <addaction name="actionSalir"/>
    </widget>
    <addaction name="menuSalir"/>
   </widget>
+  <action name="actionSalir">
+   <property name="text">
+    <string>Salir</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

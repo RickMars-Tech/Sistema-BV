@@ -2,7 +2,6 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt6 import QtCore, QtGui, QtWidgets
 from window_Login import Ui_MainWindow as Ui_login
-from main import Ventana
 
 # Función externa para leer archivo de usuarios
 def leer_usuarios():
@@ -23,21 +22,23 @@ class LoginWindow(QMainWindow, Ui_login):
         super().__init__()
         self.setupUi(self)
         
-        self.lineEdit_2.setEchoMode(self.lineEdit_2.EchoMode.Password)
-        self.pushButton.clicked.connect(self.LOGIN)
-        self.pushButton_Salir.clicked.connect(self.salir)
+        self.lineEdit_2.setEchoMode(self.lineEdit_2.EchoMode.Password)  # Hacer que la contraseña no sea visible
+        self.pushButton.clicked.connect(self.LOGIN)  # Conectar el botón de login con la función LOGIN
+        self.pushButton_Salir.clicked.connect(self.salir)  # Conectar el botón de salir con la función salir
         
-        self.Enviar = None
+        self.Enviar = None  # Esta es la instancia de la ventana principal (Ventana)
 
     def LOGIN(self):
-        nombre = self.lineEdit.text()
-        user_id = self.lineEdit_2.text()
+        nombre = self.lineEdit.text()  # Obtener el nombre del usuario
+        user_id = self.lineEdit_2.text()  # Obtener la contraseña (user_id)
 
         # Verificar credenciales de administrador
         if nombre == "admin" and user_id == "123456":
+            from main import Ventana  # Importar Ventana solo cuando sea necesario
             if self.Enviar is None:
-                self.Enviar = Ventana()
-                self.Enviar.show()
+                self.Enviar = Ventana()  # Crear la instancia de la ventana principal
+                self.Enviar.show()  # Mostrar la ventana principal
+                self.close()  # Cerrar la ventana de Login
             return
 
         # Verificar usuarios registrados
@@ -49,13 +50,15 @@ class LoginWindow(QMainWindow, Ui_login):
                 break
             
         if usuario_valido:
-            self.configurar_rol(usuario_valido.rol)
+            self.configurar_rol(usuario_valido.rol)  # Configurar el rol del usuario
+            from main import Ventana  # Importar Ventana solo cuando sea necesario
             if self.Enviar is None:
-                self.Enviar = Ventana()
-                self.Enviar.show()
+                self.Enviar = Ventana()  # Crear la instancia de la ventana principal
+                self.Enviar.show()  # Mostrar la ventana principal
+                self.close()  # Cerrar la ventana de Login
         else:
-            QMessageBox.information(self, "Error: Usuario no válido.")
-        
+            QMessageBox.information(self, "Error: Usuario no válido.")  # Si las credenciales son incorrectas
+
     # Habilitar/Deshabilitar tabs para tipo de Usuario
     def configurar_rol(self, rol): 
         if rol == "Lector": 
@@ -72,11 +75,12 @@ class LoginWindow(QMainWindow, Ui_login):
             pass
 
     def salir(self):
-        sys.exit() 
+        sys.exit()  # Salir de la aplicación
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = LoginWindow()
-    window.show()
-    sys.exit(app.exec())
+    window.show()  # Mostrar la ventana de login
+    sys.exit(app.exec())  # Ejecutar la aplicación
+
