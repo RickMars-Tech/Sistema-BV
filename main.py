@@ -158,17 +158,44 @@ class Ventana(QMainWindow, Ui_MainWindow):
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
     # Funciones para Gestión de Usuarios
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
+    def validar_entrada(self, valor):
+        """Validar que un campo no tenga caracteres no validos."""
+        if not re.match(r'^[\w\s\u00C0-\u017F]*$', valor):
+            return False
+        return True
+
     def registrar_usuario(self):
-        id_usuario = self.Reg_UsrID_LEdit.text()
-        nombre = self.Reg_UsrName_LEdit.text()
-        rol = self.Reg_UsrRol_LEdit.text()
-        datos = f"{id_usuario},{nombre},{rol}"
-        guardar_en_archivo('usuarios.txt', datos)
-        self.Reg_UsrID_LEdit.clear()
-        self.Reg_UsrName_LEdit.clear()
-        self.Reg_UsrRol_LEdit.clear()
-        self.consultar_usuarios()
-        self.actualizar_combo_usuarios()
+        try:
+            id_usuario = self.Reg_UsrID_LEdit.text().strip()
+            nombre = self.Reg_UsrName_LEdit.text().strip()
+            rol = self.Reg_UsrRol_LEdit.text().strip()
+
+            # Validar campos
+            if not id_usuario:
+                QMessageBox.warning(self, "Error", "El campo 'ID de Usuario' no puede estar vacio.")
+                return
+            if not self.validar_entrada(nombre):
+                QMessageBox.critical(self, "Error de Caracteres", "El campo 'Nombre' contiene caracteres no validos.")
+                return
+            if not self.validar_entrada(rol):
+                QMessageBox.critical(self, "Error de Caracteres", "El campo 'Rol' contiene caracteres no validos.")
+                return
+
+            # Guardar datos
+            datos = f"{id_usuario},{nombre},{rol}"
+            self.guardar_en_archivo('usuarios.txt', datos)
+
+            # Limpiar campos y actualizar vista
+            self.Reg_UsrID_LEdit.clear()
+            self.Reg_UsrName_LEdit.clear()
+            self.Reg_UsrRol_LEdit.clear()
+            self.consultar_usuarios() 
+            self.actualizar_combo_usuarios() 
+
+            QMessageBox.information(self, "Usuario Registrado", f"El usuario '{nombre}' ha sido registrado exitosamente.")
+        
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Ocurrió un error inesperado: {str(e)}")
 
     def consultar_usuarios(self):
         usuarios = leer_archivo('usuarios.txt')
