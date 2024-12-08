@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt6 import QtCore, QtGui, QtWidgets
-from Ventana_Login import Ui_MainWindow as Ui_login
+from window_Login import Ui_MainWindow as Ui_login
 from main import Ventana
 
 # Función externa para leer archivo de usuarios
