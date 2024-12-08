@@ -335,7 +335,7 @@ class Ui_MainWindow(object):
         self.label_13.setText(_translate("MainWindow", "Rol"))
         self.label_15.setText(_translate("MainWindow", "Nombre"))
         self.edit_usr_btm.setText(_translate("MainWindow", "Editar"))
-        self.label_26.setText(_translate("MainWindow", "Editar Informacion de los Libros"))
+        self.label_26.setText(_translate("MainWindow", "Editar Informacion de los Usuarios"))
         self.label_25.setText(_translate("MainWindow", "Rol"))
         self.label_22.setText(_translate("MainWindow", "Nombre"))
         self.label_23.setText(_translate("MainWindow", "ID"))
