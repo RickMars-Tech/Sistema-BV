@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from window_biblio import Ui_MainWindow
 import os
 
@@ -73,9 +73,9 @@ class Ventana(QMainWindow, Ui_MainWindow):
         estado = "Disponible"
         datos = f"{isbn},{titulo},{autor},{estado}"
         guardar_en_archivo('libros.txt', datos)
-        self.Ag_LibTitulo_LEdit.clear()
-        self.Ag_LibAutor_LEdit.clear()
-        self.Ag_LibISBN_LEdit.clear()
+        self.Ag_LibTitulo_LEdit.setText()
+        self.Ag_LibAutor_LEdit.setText()
+        self.Ag_LibISBN_LEdit.setText()
         self.consultar_libro()  # Actualizar la lista de libros
 
     def consultar_libro(self):
@@ -99,9 +99,9 @@ class Ventana(QMainWindow, Ui_MainWindow):
                 nuevo_estado_libros.append(linea)
         with open('libros.txt', 'w') as archivo:
             archivo.write('\n'.join(nuevo_estado_libros) + '\n')
-        self.edit_LibTitulo_LEdit.clear()
-        self.edit_LibAutor_LEdit.clear()
-        self.edit_LibEstado_LEdit.clear()
+        self.edit_LibTitulo_LEdit.setText("")
+        self.edit_LibAutor_LEdit.setText("")
+        self.edit_LibEstado_LEdit.setText("")
         self.consultar_libro()  # Actualizar la lista de libros
 
     # Funciones para Gestión de Usuarios
@@ -111,9 +111,9 @@ class Ventana(QMainWindow, Ui_MainWindow):
         rol = self.Reg_UsrRol_LEdit.text()
         datos = f"{id_usuario},{nombre},{rol}"
         guardar_en_archivo('usuarios.txt', datos)
-        self.Reg_UsrID_LEdit.clear()
-        self.Reg_UsrName_LEdit.clear()
-        self.Reg_UsrRol_LEdit.clear()
+        self.Reg_UsrID_LEdit.setText("")
+        self.Reg_UsrName_LEdit.setText("")
+        self.Reg_UsrRol_LEdit.setText("")
         self.consultar_usuarios()  # Actualizar la lista de usuarios
 
     def consultar_usuarios(self):
@@ -136,8 +136,8 @@ class Ventana(QMainWindow, Ui_MainWindow):
                 nuevo_estado_usuarios.append(linea)
         with open('usuarios.txt', 'w') as archivo:
             archivo.write('\n'.join(nuevo_estado_usuarios) + '\n')
-        self.Edit_Reg_UsrName_LEdit.clear()
-        self.Edit_Reg_UsrRol_LEdit.clear()
+        self.Edit_Reg_UsrName_LEdit.setText("")
+        self.Edit_Reg_UsrRol_LEdit.setText("")
         self.consultar_usuarios()  # Actualizar la lista de usuarios
 
     # Funciones para Gestión de Préstamos
