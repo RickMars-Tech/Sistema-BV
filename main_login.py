@@ -23,6 +23,7 @@ class LoginWindow(QMainWindow, Ui_login):
         super().__init__()
         self.setupUi(self)
         
+        self.lineEdit_2.setEchoMode(self.lineEdit_2.EchoMode.Password)
         self.pushButton.clicked.connect(self.LOGIN)
         self.pushButton_Salir.clicked.connect(self.salir)
         
