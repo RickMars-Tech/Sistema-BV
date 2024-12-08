@@ -1,7 +1,8 @@
 # Sistema-BV
 Sistema de Biblioteca Virtual (escrito en Python y PyQt).
 
-# Para ejecutar desde la Terminal(Linux o Windows), escribe el comando:
+# Ejecutar 
+Para ejecutar desde la Terminal(Linux o Windows), escribe el comando:
 ```bash
 python main_login.py
 ```
