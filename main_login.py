@@ -2,6 +2,7 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt6 import QtCore, QtGui, QtWidgets
 from window_Login import Ui_MainWindow as Ui_login
+from clases import Usuario
 
 # Función externa para leer archivo de usuarios
 def leer_usuarios():
