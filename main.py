@@ -184,7 +184,7 @@ class Ventana(QMainWindow, Ui_MainWindow):
 
             # Guardar datos
             datos = f"{id_usuario},{nombre},{rol}"
-            self.guardar_en_archivo('usuarios.txt', datos)
+            guardar_en_archivo('usuarios.txt', datos)
 
             # Limpiar campos y actualizar vista
             self.Reg_UsrID_LEdit.clear()
