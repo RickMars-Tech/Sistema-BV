@@ -83,17 +83,49 @@ class Ventana(QMainWindow, Ui_MainWindow):
     # Funciones para Gestión de Libros
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
     def agregar_libro(self):
-        titulo = self.Ag_LibTitulo_LEdit.text()
-        autor = self.Ag_LibAutor_LEdit.text()
-        isbn = self.Ag_LibISBN_LEdit.text()
-        estado = "Disponible"
-        datos = f"{isbn},{titulo},{autor},{estado}"
-        guardar_en_archivo('libros.txt', datos)
-        self.Ag_LibTitulo_LEdit.clear()
-        self.Ag_LibAutor_LEdit.clear()
-        self.Ag_LibISBN_LEdit.clear()
-        self.consultar_libro()
-        self.actualizar_combo_isbn()
+        try:
+            titulo = self.Ag_LibTitulo_LEdit.text().strip()
+            autor = self.Ag_LibAutor_LEdit.text().strip()
+            isbn = self.Ag_LibISBN_LEdit.text().strip()
+
+        # Validar campos
+            if not titulo or not autor or not isbn:
+                QMessageBox.warning(self, "Error", "Todos los campos son obligatorios.")
+                return
+
+            if not self.validar_entrada(titulo) or not self.validar_entrada(autor):
+                QMessageBox.critical(self, "Error de Caracteres", "Los campos 'Título' y 'Autor' contienen caracteres no válidos.")
+                return
+
+        # Verificar que el ISBN sea único
+            libros = leer_archivo('libros.txt')
+            for linea in libros:
+                isbn_actual, _, _, _ = linea.split(',')
+                if isbn == isbn_actual:
+                    QMessageBox.warning(self, "Error", "Ya existe un libro con este ISBN.")
+                    return
+
+        # Guardar datos
+            estado = "Disponible"
+            datos = f"{isbn},{titulo},{autor},{estado}"
+            guardar_en_archivo('libros.txt', datos)
+
+        # Limpiar campos y actualizar vista
+            self.Ag_LibTitulo_LEdit.clear()
+            self.Ag_LibAutor_LEdit.clear()
+            self.Ag_LibISBN_LEdit.clear()
+            self.consultar_libro()
+            self.actualizar_combo_isbn()
+            self.actualizar_combo_libros_prestamo()
+
+        # Seleccionar automáticamente el nuevo libro en el ComboBox de edición
+            self.selct_isbn_comboBx.setCurrentText(titulo)
+            self.cargar_datos_libro()  # Asegurarse de que los LineEdit se actualicen
+
+            QMessageBox.information(self, "Libro Registrado", f"El libro '{titulo}' ha sido registrado exitosamente.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Ocurrió un error inesperado: {str(e)}")
+
 
     def consultar_libro(self):
         libros = leer_archivo('libros.txt')
@@ -102,17 +134,29 @@ class Ventana(QMainWindow, Ui_MainWindow):
             self.list_libros.addItem(libro)
 
     def cargar_datos_libro(self):
-        isbn_seleccionado = self.selct_isbn_comboBx.currentText()
-        if not isbn_seleccionado:
+    # Obtener el título seleccionado en el ComboBox
+        titulo_seleccionado = self.selct_isbn_comboBx.currentText().strip()
+        if not titulo_seleccionado:
+        # Si no hay un título seleccionado, no se hace nada
             return
+
+    # Leer los datos de los libros
         libros = leer_archivo('libros.txt')
         for linea in libros:
-            isbn, titulo, autor, estado = linea.split(',')
-            if isbn == isbn_seleccionado:
-                self.edit_LibTitulo_LEdit.setText(titulo)
-                self.edit_LibAutor_LEdit.setText(autor)
-                self.edit_LibEstado_LEdit.setText(estado)
-                break
+            if linea.strip():  # Ignorar líneas vacías
+                campos = linea.split(',')
+                if len(campos) == 4:  # Asegurarse de que tiene exactamente 4 campos
+                    isbn, titulo, autor, estado = campos
+                    if titulo == titulo_seleccionado:
+                    # Actualizar los valores en los LineEdit
+                        self.edit_LibTitulo_LEdit.setText(titulo)
+                        self.edit_LibAutor_LEdit.setText(autor)
+                        self.edit_LibEstado_LEdit.setText(estado)
+                        break
+        else:
+        # Si no se encuentra el libro, mostrar advertencia
+            QMessageBox.warning(self, "Advertencia", f"No se encontró el libro '{titulo_seleccionado}' en los registros.")
+
 
     def editar_libro(self):
         isbn_seleccionado = self.selct_isbn_comboBx.currentText()
@@ -172,6 +216,9 @@ class Ventana(QMainWindow, Ui_MainWindow):
             rol = self.Reg_UsrRol_LEdit.text().strip()
 
             # Validar campos
+            if not id_usuario or not nombre or not rol:
+                QMessageBox.warning(self, "Error", "Todos los campos son obligatorios.")
+                return
             if not id_usuario:
                 QMessageBox.warning(self, "Error", "El campo 'ID de Usuario' no puede estar vacio.")
                 return
@@ -250,63 +297,147 @@ class Ventana(QMainWindow, Ui_MainWindow):
     # Funciones para Gestión de Préstamos
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
     def registrar_prestamo(self):
-        isbn = self.Reg_libPrestamo_comboBox.currentText()
-        usuario = self.Reg_usrPrestamo_LEdit.text()
-        fecha_prestamo = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
+        try:
+            titulo_libro = self.Reg_libPrestamo_comboBox.currentText().strip()
+            nombre_usuario = self.Reg_usrPrestamo_LEdit.text().strip()
+            fecha_prestamo = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
 
-        if not isbn or not usuario:
-            QMessageBox.warning(self, "Error", "Completa todos los campos para registrar el préstamo.")
-            return
+        # Validar campos
+            if not titulo_libro or not nombre_usuario:
+                QMessageBox.warning(self, "Error", "Todos los campos son obligatorios para registrar un préstamo.")
+                return
 
-        # Actualizar estado del libro a "No Disponible"
-        libros = leer_archivo('libros.txt')
-        nuevo_estado_libros = []
-        for linea in libros:
-            isbn_actual, titulo, autor, estado = linea.split(',')
-            if isbn_actual == isbn:
-                nuevo_estado_libros.append(f"{isbn_actual},{titulo},{autor},No Disponible")
-            else:
-                nuevo_estado_libros.append(linea)
+        # Verificar que el usuario exista
+            usuarios = leer_archivo('usuarios.txt')
+            usuario_existe = False
+            for linea in usuarios:
+                _, nombre, _ = linea.split(',')
+                if nombre == nombre_usuario:
+                    usuario_existe = True
+                    break
 
-        with open('libros.txt', 'w') as archivo:
-            archivo.write('\n'.join(nuevo_estado_libros) + '\n')
+            if not usuario_existe:
+                QMessageBox.critical(self, "Error", f"El usuario '{nombre_usuario}' no existe. Verifique los datos.")
+                return
+
+        # Actualizar el estado del libro a "No Disponible"
+            libros = leer_archivo('libros.txt')
+            nuevo_estado_libros = []
+            prestado = False
+
+            for linea in libros:
+                if linea.strip():  # Ignorar líneas vacías
+                    campos = linea.split(',')
+                    if len(campos) == 4:  # Asegurarse de que tiene exactamente 4 campos
+                        isbn, titulo, autor, estado = campos
+                        if titulo == titulo_libro and estado == "Disponible":
+                            nuevo_estado_libros.append(f"{isbn},{titulo},{autor},No Disponible")
+                            prestado = True
+                        else:
+                            nuevo_estado_libros.append(linea)
+
+            if not prestado:
+                QMessageBox.warning(self, "Error", f"El libro '{titulo_libro}' no está disponible para préstamo.")
+                return
+
+        # Guardar cambios en el archivo de libros
+            with open('libros.txt', 'w') as archivo:
+                archivo.write('\n'.join(nuevo_estado_libros) + '\n')
 
         # Registrar el préstamo en el historial
-        registro = f"Préstamo - ISBN: {isbn}, Usuario: {usuario}, Fecha: {fecha_prestamo}"
-        guardar_en_archivo('historial_prestamos.txt', registro)
+            registro = f"Préstamo - Libro: {titulo_libro}, Usuario: {nombre_usuario}, Fecha: {fecha_prestamo}"
+            guardar_en_archivo('historial_prestamos.txt', registro)
 
-        QMessageBox.information(self, "Préstamo Registrado", f"El préstamo del libro con ISBN '{isbn}' ha sido registrado.")
-        self.actualizar_combo_libros_prestamo()
-        self.consultar_historial()
+            QMessageBox.information(self, "Préstamo Registrado", f"El préstamo del libro '{titulo_libro}' ha sido registrado.")
+            self.actualizar_combo_libros_prestamo()  # Actualizar los ComboBoxes
+            self.consultar_historial()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Ocurrió un error inesperado: {str(e)}")
+
+
 
     def registrar_devolucion(self):
-        isbn = self.Reg_libDevolucion_comboBox.currentText()
-        fecha_devolucion = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
+        try:
+            titulo_libro = self.Reg_libDevolucion_comboBox.currentText().strip()
+            usuario_devolviendo = self.Reg_usrPrestamo_LEdit.text().strip()
+            fecha_devolucion = QDateTime.currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
 
-        if not isbn:
-            QMessageBox.warning(self, "Error", "Selecciona un libro para registrar la devolución.")
-            return
+            if not titulo_libro or not usuario_devolviendo:
+                QMessageBox.warning(self, "Error", "Todos los campos son obligatorios para registrar la devolución.")
+                return
 
-        # Actualizar estado del libro a "Disponible"
-        libros = leer_archivo('libros.txt')
-        nuevo_estado_libros = []
-        for linea in libros:
-            isbn_actual, titulo, autor, estado = linea.split(',')
-            if isbn_actual == isbn:
-                nuevo_estado_libros.append(f"{isbn_actual},{titulo},{autor},Disponible")
-            else:
-                nuevo_estado_libros.append(linea)
+        # Actualizar el estado del libro a "Disponible"
+            libros = leer_archivo('libros.txt')
+            nuevo_estado_libros = []
+            devuelto = False
 
-        with open('libros.txt', 'w') as archivo:
-            archivo.write('\n'.join(nuevo_estado_libros) + '\n')
+            for linea in libros:
+                if linea.strip():  # Ignorar líneas vacías
+                    campos = linea.split(',')
+                    if len(campos) == 4:  # Asegurarse de que tiene exactamente 4 campos
+                        isbn, titulo, autor, estado = campos
+                        if titulo == titulo_libro and estado == "No Disponible":
+                            nuevo_estado_libros.append(f"{isbn},{titulo},{autor},Disponible")
+                            devuelto = True
+                        else:
+                            nuevo_estado_libros.append(linea)
+
+            if not devuelto:
+                QMessageBox.warning(self, "Error", f"El libro '{titulo_libro}' ya está disponible o no existe.")
+                return
+
+        # Guardar cambios en el archivo de libros
+            with open('libros.txt', 'w') as archivo:
+                archivo.write('\n'.join(nuevo_estado_libros) + '\n')
 
         # Registrar la devolución en el historial
-        registro = f"Devolución - ISBN: {isbn}, Fecha: {fecha_devolucion}"
-        guardar_en_archivo('historial_prestamos.txt', registro)
+            registro = f"Devolución - Libro: {titulo_libro}, Usuario: {usuario_devolviendo}, Fecha: {fecha_devolucion}"
+            guardar_en_archivo('historial_prestamos.txt', registro)
 
-        QMessageBox.information(self, "Devolución Registrada", f"La devolución del libro con ISBN '{isbn}' ha sido registrada.")
-        self.actualizar_combo_libros_prestamo()
-        self.consultar_historial()
+            QMessageBox.information(self, "Devolución Registrada", f"La devolución del libro '{titulo_libro}' ha sido registrada.")
+            self.actualizar_combo_libros_prestamo()  # Actualizar los ComboBoxes
+            self.consultar_historial()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Ocurrió un error inesperado: {str(e)}")
+
+
+    # Actualizar ComboBox de Libros para Préstamos y Devoluciones
+    def actualizar_combo_libros_prestamo(self):
+        # Limpiar ComboBox de préstamos y devoluciones
+        self.Reg_libPrestamo_comboBox.clear()
+        self.Reg_libDevolucion_comboBox.clear()
+
+        libros = leer_archivo('libros.txt')
+
+        for linea in libros:
+            if linea.strip():  # Asegurarse de que la línea no esté vacía
+                campos = linea.split(',')
+                if len(campos) == 4:  # Solo procesar líneas con exactamente 4 campos
+                    isbn, titulo, autor, estado = campos
+                    if estado == "Disponible":
+                        self.Reg_libPrestamo_comboBox.addItem(titulo)  # Mostrar solo libros disponibles para préstamo
+                    elif estado == "No Disponible":
+                        self.Reg_libDevolucion_comboBox.addItem(titulo)  # Mostrar solo libros no disponibles para devolución
+                elif len(campos) == 5:  # Manejar casos donde hay un usuario asignado
+                    isbn, titulo, autor, estado, usuario = campos
+                    if estado == "No Disponible":
+                        self.Reg_libDevolucion_comboBox.addItem(titulo)  # Mostrar solo libros no disponibles para devolución
+                else:
+                    # Si la línea no tiene 4 o 5 campos, mostrar un mensaje de advertencia
+                    QMessageBox.warning(self, "Advertencia", f"Formato incorrecto en la línea: {linea}")
+
+    def actualizar_combo_usuarios(self):
+        usuarios = leer_archivo('usuarios.txt')
+        self.selct_usrID_comboBx.clear()  # Limpiar ComboBox de usuarios
+        for linea in usuarios:
+            id_usuario, _, _ = linea.split(',')
+            self.selct_usrID_comboBx.addItem(id_usuario)
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
+    # Funciones de Consulta de Historial
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
 
     def consultar_historial(self):
         historial = leer_archivo('historial_prestamos.txt')
@@ -319,10 +450,17 @@ class Ventana(QMainWindow, Ui_MainWindow):
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~@
     def actualizar_combo_isbn(self):
         libros = leer_archivo('libros.txt')
-        self.selct_isbn_comboBx.clear()
+        self.selct_isbn_comboBx.clear()  # Limpiar el ComboBox de ISBN
+
         for linea in libros:
-            isbn, _, _, _ = linea.split(',')
-            self.selct_isbn_comboBx.addItem(isbn)
+            if linea.strip():  # Ignorar líneas vacías
+                campos = linea.split(',')
+                if len(campos) == 4:  # Asegurarse de que la línea tenga exactamente 4 campos
+                    isbn, titulo, _, _ = campos
+                    self.selct_isbn_comboBx.addItem(titulo)  # Mostrar solo el título del libro
+                else:
+                # Si la línea no tiene 4 campos, mostrar un mensaje de advertencia
+                    QMessageBox.warning(self, "Advertencia", f"Formato incorrecto en la línea: {linea}")
 
     def actualizar_combo_usuarios(self):
         usuarios = leer_archivo('usuarios.txt')
